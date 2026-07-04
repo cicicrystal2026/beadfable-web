@@ -1,0 +1,277 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Design · AI Chibi Studio — BeadFable</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><circle cx=%2250%22 cy=%2250%22 r=%2242%22 fill=%22%23e35d3d%22/><circle cx=%2250%22 cy=%2250%22 r=%2216%22 fill=%22%23fff8f1%22/></svg>" />
+  <link rel="stylesheet" href="/styles.css" />
+  <style>
+    .ribbon {
+      background: #2b1d16; color: #f4dfce; text-align: center;
+      font-size: 12px; font-weight: 700; letter-spacing: 1px;
+      padding: 6px 0; text-transform: uppercase;
+    }
+    .freebanner {
+      display: flex; align-items: center; gap: 10px;
+      background: #e8f6ec; border: 1px solid #b7e0c3; color: #14734a;
+      border-radius: 14px; padding: 12px 18px; font-weight: 700;
+      margin: 18px 0 26px;
+    }
+    .ai-grid { display: grid; grid-template-columns: 1.05fr 0.95fr; gap: 32px; align-items: start; }
+    .stepline { font-size: 13px; font-weight: 800; letter-spacing: 1px; text-transform: uppercase; color: #8a6c5c; margin: 0 0 10px; }
+    .upload-mini {
+      display: flex; align-items: center; gap: 14px;
+      border: 1px solid #f0ddcb; border-radius: 14px; padding: 12px 14px; background: #fffdf9;
+      margin-bottom: 22px;
+    }
+    .upload-mini canvas { border-radius: 10px; display: block; }
+    .upload-meta { font-size: 14px; color: #694f42; }
+    .upload-meta strong { display: block; color: #2b1d16; }
+    .upload-mini .swap { margin-left: auto; font-size: 13px; font-weight: 700; color: #b9452c; text-decoration: none; }
+    .stylegrid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 22px; }
+    .stylecard {
+      position: relative; border: 2px solid #f0ddcb; border-radius: 14px;
+      background: #fff; padding: 10px 8px 12px; text-align: center; cursor: pointer;
+    }
+    .stylecard canvas { display: block; margin: 0 auto 8px; border-radius: 8px; background: #fdf1e3; }
+    .stylecard .sname { font-weight: 800; font-size: 13px; }
+    .stylecard .sdesc { font-size: 11px; color: #8a6c5c; margin-top: 2px; }
+    .stylecard.selected { border-color: #e35d3d; box-shadow: 0 6px 18px rgba(227,93,61,.16); }
+    .stylecard.selected::after {
+      content: "✓"; position: absolute; top: -9px; right: -9px;
+      width: 22px; height: 22px; border-radius: 50%; background: #e35d3d; color: #fff;
+      font-size: 13px; font-weight: 800; display: flex; align-items: center; justify-content: center;
+    }
+    .custom input {
+      width: 100%; padding: 12px 14px; border: 1px solid #dcb894; border-radius: 12px;
+      font-size: 15px; background: #fff; margin: 8px 0 22px;
+    }
+    .gen-note { margin-top: 10px; font-size: 13px; color: #8a6c5c; }
+    .result-panel { position: sticky; top: 20px; }
+    .preview-frame {
+      position: relative; border-radius: 16px; overflow: hidden; border: 1px solid #f0ddcb;
+      background: #fffdf9;
+    }
+    .preview-frame canvas { display: block; width: 100%; height: auto; filter: blur(1.2px); }
+    .watermark {
+      position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+      font-size: 54px; font-weight: 900; letter-spacing: 8px; color: rgba(43,29,22,.16);
+      transform: rotate(-18deg); pointer-events: none; text-transform: uppercase;
+    }
+    .result-meta { display: flex; gap: 8px; flex-wrap: wrap; margin: 14px 0 16px; }
+    .meta-chip {
+      font-size: 12px; font-weight: 700; color: #694f42; background: #f4ead9;
+      border-radius: 999px; padding: 5px 11px;
+    }
+    .result-actions { display: grid; gap: 12px; }
+    .retry {
+      background: none; border: 2px dashed #dcb894; border-radius: 12px; padding: 12px;
+      font-size: 15px; font-weight: 700; color: #694f42; cursor: pointer;
+    }
+    .sub-hint { text-align: center; font-size: 13px; color: #8a6c5c; }
+    .sub-hint a { color: #a8761d; font-weight: 800; }
+    /* paywall */
+    .pay-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin: 16px 0 6px; }
+    .pay-card { border: 2px solid #f0ddcb; border-radius: 14px; padding: 18px 16px; }
+    .pay-card.reco { border-color: #d99a2b; background: #fdf3e0; position: relative; }
+    .pay-card.reco::before {
+      content: "MOST POPULAR"; position: absolute; top: -10px; left: 14px;
+      background: #d99a2b; color: #fff; font-size: 10px; font-weight: 800;
+      letter-spacing: 1px; border-radius: 999px; padding: 3px 9px;
+    }
+    .pay-price { font-size: 26px; font-weight: 900; letter-spacing: -1px; }
+    .pay-price span { font-size: 13px; font-weight: 700; color: #8a6c5c; }
+    .pay-card ul { list-style: none; margin: 10px 0 14px; padding: 0; font-size: 13.5px; color: #694f42; line-height: 1.9; }
+    .pay-card .button { width: 100%; text-align: center; padding: 12px; font-size: 14px; }
+    .trust { font-size: 12px; color: #8a6c5c; text-align: center; margin-top: 12px; }
+    @media (max-width: 860px) {
+      .ai-grid { grid-template-columns: 1fr; }
+      .stylegrid { grid-template-columns: repeat(2, 1fr); }
+      .pay-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="ribbon">Design preview · V1.1 — AI Chibi Studio (state: result)</div>
+  <div class="wrap">
+    <header>
+      <div class="brand">BeadFable <span class="badge">Beta</span></div>
+      <nav>
+        <a href="/">Studio</a>
+        <a href="#" style="color:#e35d3d">AI Chibi</a>
+        <a href="/design/pricing.html">Pricing</a>
+        <a href="/design/pattern.html">Bead Kit</a>
+      </nav>
+    </header>
+
+    <main>
+      <h1 style="font-size:clamp(30px,4vw,44px);letter-spacing:-1.5px;margin:10px 0 6px;">AI Chibi Studio</h1>
+      <p class="hint" style="margin-bottom:0;">Turn any photo into a chibi first — then we bead it.</p>
+
+      <div class="freebanner">🎉 Your first pattern is free — HD download included.</div>
+
+      <div class="ai-grid">
+        <!-- Left: input -->
+        <section class="panel" style="margin:0;">
+          <p class="stepline">1 · Your photo</p>
+          <div class="upload-mini">
+            <canvas id="photoThumb" width="64" height="64"></canvas>
+            <div class="upload-meta"><strong>my-cat.jpg</strong>uploaded · stays in your browser</div>
+            <a class="swap" href="#">Change</a>
+          </div>
+
+          <p class="stepline">2 · Pick a style</p>
+          <div class="stylegrid">
+            <div class="stylecard selected">
+              <canvas width="72" height="72" data-style="chibi"></canvas>
+              <div class="sname">Chibi</div>
+              <div class="sdesc">big eyes, tiny body</div>
+            </div>
+            <div class="stylecard">
+              <canvas width="72" height="72" data-style="bighead"></canvas>
+              <div class="sname">Big-head</div>
+              <div class="sdesc">portrait, oversized head</div>
+            </div>
+            <div class="stylecard">
+              <canvas width="72" height="72" data-style="toon"></canvas>
+              <div class="sname">Toon</div>
+              <div class="sdesc">bold lines, flat color</div>
+            </div>
+            <div class="stylecard">
+              <canvas width="72" height="72" data-style="faithful"></canvas>
+              <div class="sname">Faithful</div>
+              <div class="sdesc">closest to the photo</div>
+            </div>
+          </div>
+
+          <p class="stepline">3 · Anything specific? <span style="font-weight:400;text-transform:none;color:#a68b7a;">(optional)</span></p>
+          <div class="custom">
+            <input type="text" placeholder="e.g. make the sweater red, simpler background" />
+          </div>
+
+          <button class="button" style="width:100%;">Generate my chibi ✨</button>
+          <div class="gen-note">Takes 15–30 seconds · every run comes out a little different — 2 free retries per photo</div>
+        </section>
+
+        <!-- Right: result -->
+        <section class="panel result-panel" style="margin:0;">
+          <p class="stepline">Result · preview</p>
+          <div class="preview-frame">
+            <canvas id="resultPreview" width="290" height="290" aria-label="Low-resolution preview of your chibi bead pattern"></canvas>
+            <div class="watermark">Preview</div>
+          </div>
+          <div class="result-meta">
+            <span class="meta-chip">29×29 board</span>
+            <span class="meta-chip">11 colors</span>
+            <span class="meta-chip">512 beads</span>
+            <span class="meta-chip">Perler palette</span>
+          </div>
+          <div class="result-actions">
+            <button class="retry">↻ Retry — 2 free retries left</button>
+            <button class="button gold" id="payBtn" style="width:100%;">Download HD pattern + bead list · $0.99</button>
+            <div class="sub-hint">or go <a href="/design/pricing.html">Unlimited — $4.99/mo</a></div>
+          </div>
+        </section>
+      </div>
+    </main>
+
+    <footer style="margin-top:36px;">
+      <div>© 2026 BeadFable · Made for colorful ideas.</div>
+      <div class="fineprint">Design preview — not functional. Styles are generic (no brand-IP names, PRD D9).</div>
+    </footer>
+  </div>
+
+  <!-- Paywall modal -->
+  <div id="paywall" class="modal" hidden>
+    <div class="modal-card" style="max-width:560px;">
+      <button class="modal-close" id="payClose" aria-label="Close">×</button>
+      <h3 style="margin-bottom:4px;">Take your chibi home</h3>
+      <p style="margin:0;color:#694f42;">HD pattern sheet + exact bead-by-bead list, yours forever.</p>
+      <div class="pay-grid">
+        <div class="pay-card">
+          <div class="pay-price">$0.99 <span>one time</span></div>
+          <ul>
+            <li>✔ This pattern in HD</li>
+            <li>✔ Exact bead list (BOM)</li>
+            <li>✔ Print-ready + coordinates</li>
+          </ul>
+          <button class="button secondary">Buy this pattern</button>
+        </div>
+        <div class="pay-card reco">
+          <div class="pay-price">$4.99 <span>/ month</span></div>
+          <ul>
+            <li>✔ Unlimited AI generations</li>
+            <li>✔ All patterns in HD</li>
+            <li>✔ Priority rendering</li>
+          </ul>
+          <button class="button gold">Go Unlimited</button>
+        </div>
+      </div>
+      <div class="trust">Cancel anytime · Secure checkout by Stripe · First pattern always free</div>
+    </div>
+  </div>
+
+  <script>
+    // sprite painter for style thumbnails & preview
+    function paint(cv, map, colors, cellRound) {
+      const ctx = cv.getContext("2d");
+      const n = map.length, cell = cv.width / n;
+      map.forEach((row, y) => row.split("").forEach((ch, x) => {
+        if (ch === ".") return;
+        ctx.fillStyle = colors[ch];
+        if (cellRound) {
+          ctx.beginPath();
+          ctx.arc(x*cell+cell/2, y*cell+cell/2, cell/2 - 0.6, 0, Math.PI*2);
+          ctx.fill();
+          ctx.fillStyle = "rgba(255,255,255,.28)";
+          ctx.beginPath();
+          ctx.arc(x*cell+cell/2-cell*.16, y*cell+cell/2-cell*.18, cell*.16, 0, Math.PI*2);
+          ctx.fill();
+        } else {
+          ctx.fillRect(x*cell, y*cell, cell+0.5, cell+0.5);
+        }
+      }));
+    }
+    const CAT = [
+      "..K......K..",
+      ".KOK....KOK.",
+      ".KOOKKKKOOK.",
+      ".KOOOOOOOOK.",
+      "KOOWKOOWKOOK",
+      "KOOKKOOKKOOK",
+      "KOOOOOOOOOOK",
+      "KOOPKOOKPOOK",
+      ".KOOKKKKOOK.",
+      ".KOOOOOOOOK.",
+      "..KKKKKKKK..",
+      "....K..K...."
+    ];
+    const PALS = {
+      chibi:   { K:"#362f2d", O:"#f2b658", W:"#ffffff", P:"#ff6ea2" },
+      bighead: { K:"#5a3b31", O:"#fedcb9", W:"#362f2d", P:"#ff9e8d" },
+      toon:    { K:"#2a3b7f", O:"#f6df35", W:"#ffffff", P:"#ff4a54" },
+      faithful:{ K:"#57595b", O:"#d8a373", W:"#f8f8f8", P:"#c22d33" }
+    };
+    document.querySelectorAll(".stylecard canvas").forEach((cv) => {
+      paint(cv, CAT, PALS[cv.dataset.style], false);
+    });
+    // photo thumb: warm gradient + blob (photo stand-in)
+    (function () {
+      const cv = document.getElementById("photoThumb"), x = cv.getContext("2d");
+      const g = x.createLinearGradient(0, 0, 64, 64);
+      g.addColorStop(0, "#87b7e0"); g.addColorStop(1, "#f4dfce");
+      x.fillStyle = g; x.fillRect(0, 0, 64, 64);
+      x.fillStyle = "#a87748"; x.beginPath(); x.arc(32, 40, 18, 0, Math.PI * 2); x.fill();
+      x.fillStyle = "#362f2d"; x.beginPath(); x.arc(26, 38, 2.4, 0, Math.PI*2); x.arc(38, 38, 2.4, 0, Math.PI*2); x.fill();
+    })();
+    // result preview: bead-rendered chibi cat
+    paint(document.getElementById("resultPreview"), CAT, PALS.chibi, true);
+    // paywall
+    const pw = document.getElementById("paywall");
+    document.getElementById("payBtn").addEventListener("click", () => { pw.hidden = false; });
+    document.getElementById("payClose").addEventListener("click", () => { pw.hidden = true; });
+    pw.addEventListener("click", (e) => { if (e.target === pw) pw.hidden = true; });
+  </script>
+</body>
+</html>

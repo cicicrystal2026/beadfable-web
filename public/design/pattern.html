@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Design · Pattern page /p/{id} — BeadFable</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><circle cx=%2250%22 cy=%2250%22 r=%2242%22 fill=%22%23e35d3d%22/><circle cx=%2250%22 cy=%2250%22 r=%2216%22 fill=%22%23fff8f1%22/></svg>" />
+  <link rel="stylesheet" href="/styles.css" />
+  <style>
+    .ribbon {
+      background: #2b1d16; color: #f4dfce; text-align: center;
+      font-size: 12px; font-weight: 700; letter-spacing: 1px;
+      padding: 6px 0; text-transform: uppercase;
+    }
+    .p-grid { display: grid; grid-template-columns: 1.05fr 0.95fr; gap: 32px; align-items: start; }
+    .pattern-hero { background: #fff; border: 1px solid #f0ddcb; border-radius: 20px; padding: 26px; }
+    .pattern-hero canvas { display: block; width: 100%; height: auto; border-radius: 12px; background: #fffdf9; }
+    .meta-row { display: flex; gap: 8px; flex-wrap: wrap; margin: 16px 0 8px; }
+    .meta-chip { font-size: 12px; font-weight: 700; color: #694f42; background: #f4ead9; border-radius: 999px; padding: 5px 11px; }
+    .author { font-size: 13px; color: #8a6c5c; }
+    .author b { color: #b9452c; }
+    .cta-card { position: sticky; top: 20px; }
+    .cta-card .button { width: 100%; text-align: center; }
+    .cta-stack { display: grid; gap: 12px; }
+    .kit-line { display: flex; justify-content: space-between; font-size: 14px; color: #694f42; padding: 6px 2px; }
+    .kit-line + .kit-line { border-top: 1px dashed #f0ddcb; }
+    .kit-line b { color: #2b1d16; }
+    .ghostlink { text-align: center; font-size: 14px; font-weight: 800; color: #b9452c; text-decoration: none; padding: 8px; }
+    .share-row { display: flex; gap: 10px; justify-content: center; margin-top: 14px; }
+    .share-chip {
+      font-size: 12.5px; font-weight: 700; color: #694f42; border: 1px solid #e7d6c3;
+      border-radius: 999px; padding: 7px 13px; background: #fff; cursor: pointer;
+    }
+    .bom-more { text-align: center; font-size: 13.5px; font-weight: 800; color: #b9452c; padding: 10px; cursor: pointer; }
+    .mini-steps { display: flex; gap: 14px; margin-top: 8px; }
+    .mini-step { flex: 1; background: #fffdf9; border: 1px solid #f0ddcb; border-radius: 12px; padding: 12px 14px; font-size: 13.5px; color: #694f42; }
+    .mini-step b { display: block; color: #2b1d16; margin-bottom: 2px; }
+    @media (max-width: 860px) {
+      .p-grid { grid-template-columns: 1fr; }
+      .mini-steps { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+  <div class="ribbon">Design preview · V1.1 — shared pattern page /p/8342 (visitor view, from a printed sheet)</div>
+  <div class="wrap">
+    <header>
+      <div class="brand">BeadFable <span class="badge">Beta</span></div>
+      <nav>
+        <a href="/">Studio</a>
+        <a href="/design/ai-studio.html">AI Chibi</a>
+        <a href="/design/pricing.html">Pricing</a>
+        <a href="#" style="color:#e35d3d">Bead Kit</a>
+      </nav>
+    </header>
+
+    <main>
+      <div class="p-grid" style="margin-top:14px;">
+        <!-- Pattern -->
+        <section>
+          <div class="pattern-hero">
+            <canvas id="beadArt" width="576" height="576" aria-label="Chibi cat fuse bead pattern, 29 by 29 beads"></canvas>
+            <div class="meta-row">
+              <span class="meta-chip">29×29 board</span>
+              <span class="meta-chip">11 colors</span>
+              <span class="meta-chip">512 beads</span>
+              <span class="meta-chip">Perler palette</span>
+              <span class="meta-chip">~2h to finish</span>
+            </div>
+            <div class="author">Pattern <b>#8342</b> · Made with <b>BeadFable</b> · shared 214 times</div>
+          </div>
+
+          <div class="panel" style="margin-top:26px;">
+            <h3 style="margin:0 0 6px;">Bead list</h3>
+            <p class="bom-summary">Exact counts — buy only what this pattern needs.</p>
+            <table class="bom">
+              <thead><tr><th>#</th><th></th><th>Color</th><th>Beads</th><th></th></tr></thead>
+              <tbody>
+                <tr><td class="bom-num">1</td><td><span class="swatch" style="background:#F2B658"></span></td><td>Cheddar<span class="bom-code">P08</span></td><td class="bom-count">238</td><td><a class="buy" href="#">Buy on Amazon</a></td></tr>
+                <tr><td class="bom-num">2</td><td><span class="swatch" style="background:#362F2D"></span></td><td>Black<span class="bom-code">P05</span></td><td class="bom-count">96</td><td><a class="buy" href="#">Buy on Amazon</a></td></tr>
+                <tr><td class="bom-num">3</td><td><span class="swatch" style="background:#FFFFFF;border-color:#ccc"></span></td><td>White<span class="bom-code">P01</span></td><td class="bom-count">64</td><td><a class="buy" href="#">Buy on Amazon</a></td></tr>
+                <tr><td class="bom-num">4</td><td><span class="swatch" style="background:#FF6EA2"></span></td><td>Bubblegum<span class="bom-code">P15</span></td><td class="bom-count">42</td><td><a class="buy" href="#">Buy on Amazon</a></td></tr>
+                <tr><td class="bom-num">5</td><td><span class="swatch" style="background:#FEDCB9"></span></td><td>Peach<span class="bom-code">P18</span></td><td class="bom-count">38</td><td><a class="buy" href="#">Buy on Amazon</a></td></tr>
+                <tr><td class="bom-num">6</td><td><span class="swatch" style="background:#8B4A3C"></span></td><td>Rust<span class="bom-code">P23</span></td><td class="bom-count">21</td><td><a class="buy" href="#">Buy on Amazon</a></td></tr>
+              </tbody>
+            </table>
+            <div class="bom-more">+ 5 more colors ▾</div>
+          </div>
+        </section>
+
+        <!-- CTAs -->
+        <aside class="cta-card">
+          <div class="panel" style="margin:0;background:#fdf3e0;border-color:#f0dcb4;">
+            <h3 style="margin:0 0 4px;">Make this one — with zero shopping</h3>
+            <p style="margin:0 0 14px;color:#694f42;font-size:14.5px;">
+              Every bead counted for pattern #8342, packed and shipped.
+            </p>
+            <div style="margin-bottom:14px;">
+              <div class="kit-line"><span>11 colors, counted to the bead (+5% spares)</span><b>512+</b></div>
+              <div class="kit-line"><span>29×29 pegboard</span><b>1</b></div>
+              <div class="kit-line"><span>Ironing paper + printed pattern</span><b>✓</b></div>
+            </div>
+            <div class="cta-stack">
+              <button class="button gold">Get the exact Bead Kit · $19.9</button>
+              <button class="button">Download pattern (PNG) — free</button>
+              <a class="ghostlink" href="/">✨ Or make your own from a photo — free</a>
+            </div>
+            <div class="note" style="text-align:center;">Kit ships from US warehouse · pattern is free forever</div>
+          </div>
+          <div class="share-row">
+            <button class="share-chip">📌 Pin it</button>
+            <button class="share-chip">𝕏 Post</button>
+            <button class="share-chip">🔗 Copy link</button>
+          </div>
+        </aside>
+      </div>
+
+      <section class="panel" style="margin-top:26px;">
+        <h3 style="margin:0 0 12px;">Never beaded before? It's three steps.</h3>
+        <div class="mini-steps">
+          <div class="mini-step"><b>1 · Place</b>Follow the numbered grid, color by color.</div>
+          <div class="mini-step"><b>2 · Iron</b>Cover with paper, iron ~20s on medium.</div>
+          <div class="mini-step"><b>3 · Peel &amp; flip</b>Cool it, flip it, iron the back. Done.</div>
+        </div>
+      </section>
+    </main>
+
+    <footer style="margin-top:36px;">
+      <div>© 2026 BeadFable · Made for colorful ideas.</div>
+      <div class="fineprint">Design preview — not functional. This page is the landing target of the pattern-sheet watermark (PRD V1.1).</div>
+    </footer>
+  </div>
+
+  <script>
+    // bead-rendered chibi cat (each bead = ring with hole, like real fused beads)
+    const MAP = [
+      "..K.........K..",
+      ".KOK.......KOK.",
+      ".KOOK.....KOOK.",
+      ".KOOOKKKKKOOOK.",
+      "KOOOOOOOOOOOOOK",
+      "KOOWWKOOOKWWOOK",
+      "KOOWKKOOOKKWOOK",
+      "KOOOOOOOOOOOOOK",
+      "KOOPPOOOOOPPOOK",
+      "KOOOOOKKKOOOOOK",
+      ".KOOOOOOOOOOOK.",
+      ".KKOOOOOOOOOKK.",
+      "..KKKKKKKKKKK..",
+      "....KK...KK....",
+      "..............."
+    ];
+    const COL = { K: "#362f2d", O: "#f2b658", W: "#ffffff", P: "#ff6ea2" };
+    const cv = document.getElementById("beadArt"), ctx = cv.getContext("2d");
+    const n = 15, cell = cv.width / n;
+    ctx.fillStyle = "#fffdf9"; ctx.fillRect(0, 0, cv.width, cv.height);
+    MAP.forEach((row, y) => row.split("").forEach((ch, x) => {
+      if (ch === ".") return;
+      const cx = x * cell + cell / 2, cy = y * cell + cell / 2, r = cell / 2 - 2;
+      ctx.fillStyle = COL[ch];
+      ctx.beginPath(); ctx.arc(cx, cy, r, 0, Math.PI * 2); ctx.fill();
+      ctx.fillStyle = "rgba(255,255,255,.3)";
+      ctx.beginPath(); ctx.arc(cx - r * .3, cy - r * .35, r * .28, 0, Math.PI * 2); ctx.fill();
+      ctx.fillStyle = "rgba(0,0,0,.16)";
+      ctx.beginPath(); ctx.arc(cx, cy, r * .3, 0, Math.PI * 2); ctx.fill();
+      ctx.fillStyle = "#fffdf9";
+      ctx.beginPath(); ctx.arc(cx, cy, r * .18, 0, Math.PI * 2); ctx.fill();
+    }));
+  </script>
+</body>
+</html>

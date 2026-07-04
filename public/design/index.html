@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BeadFable · Design Previews</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><circle cx=%2250%22 cy=%2250%22 r=%2242%22 fill=%22%23e35d3d%22/><circle cx=%2250%22 cy=%2250%22 r=%2216%22 fill=%22%23fff8f1%22/></svg>" />
+  <link rel="stylesheet" href="/styles.css" />
+  <style>
+    .cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; margin: 26px 0; }
+    .dcard { display: block; background: #fff; border: 1px solid #f0ddcb; border-radius: 18px; padding: 24px; text-decoration: none; color: inherit; }
+    .dcard:hover { border-color: #e35d3d; }
+    .dcard b { font-size: 17px; }
+    .dcard p { margin: 6px 0 0; color: #694f42; font-size: 14px; line-height: 1.5; }
+    .tag { display: inline-block; font-size: 11px; font-weight: 800; letter-spacing: 1px; color: #a8761d; background: #fdf3e0; border-radius: 999px; padding: 3px 10px; margin-bottom: 10px; }
+    .tokens { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 8px; }
+    .tk { width: 44px; height: 44px; border-radius: 10px; border: 1px solid rgba(0,0,0,.1); }
+    @media (max-width: 860px) { .cards { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div class="brand">BeadFable <span class="badge">Design</span></div>
+      <nav><a href="/">← Live site</a></nav>
+    </header>
+    <main>
+      <h1 style="font-size:clamp(30px,4vw,44px);letter-spacing:-1.5px;">V1.1 design previews</h1>
+      <p class="hint">High-fidelity, clickable, built with the production stylesheet. Spec: <code>docs/design-spec.md</code>.</p>
+
+      <div class="cards">
+        <a class="dcard" href="/design/ai-studio.html">
+          <span class="tag">V1.1 · REVENUE</span><br>
+          <b>AI Chibi Studio</b>
+          <p>Style picker → preview with watermark → paywall (per-pattern vs Unlimited). Billing moment at download, first one free.</p>
+        </a>
+        <a class="dcard" href="/design/pattern.html">
+          <span class="tag">V1.1 · VIRAL LOOP</span><br>
+          <b>Pattern page /p/{id}</b>
+          <p>Landing target of the sheet watermark. Kit $19.9 first, free download second, "make your own" third.</p>
+        </a>
+        <a class="dcard" href="/design/pricing.html">
+          <span class="tag">V1.1 · PRICING</span><br>
+          <b>Pricing</b>
+          <p>Free / $0.99 per pattern / $4.99 Unlimited (recommended), kit banner kept separate from subscription.</p>
+        </a>
+      </div>
+
+      <div class="panel">
+        <h3 style="margin:0 0 10px;">Core tokens</h3>
+        <div class="tokens">
+          <div class="tk" style="background:#FFF8F1" title="--bg"></div>
+          <div class="tk" style="background:#2B1D16" title="--ink"></div>
+          <div class="tk" style="background:#694F42" title="--sub"></div>
+          <div class="tk" style="background:#E35D3D" title="--primary (free/creative actions)"></div>
+          <div class="tk" style="background:#D99A2B" title="--commerce (paid actions)"></div>
+          <div class="tk" style="background:#FDF3E0" title="--commerce-bg"></div>
+          <div class="tk" style="background:#F0DDCB" title="--line"></div>
+          <div class="tk" style="background:#199D53" title="--ok"></div>
+        </div>
+        <p style="color:#694f42;font-size:14px;margin-bottom:0;">Rule of the house: <b>coral = free/creative, gold = costs money.</b> Button shadows are hard-offset — beads pressed into a board.</p>
+      </div>
+    </main>
+    <footer style="margin-top:36px;">
+      <div>© 2026 BeadFable · internal design previews</div>
+    </footer>
+  </div>
+</body>
+</html>
