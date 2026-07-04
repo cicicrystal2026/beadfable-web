@@ -1,0 +1,200 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BeadFable — Turn Anything into Chibi Bead Art</title>
+  <meta name="description"
+    content="Turn yourself, your idol or your cat into an adorable chibi fuse bead pattern — with an exact, bead-by-bead shopping list. No leftover beads, nothing missing." />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><circle cx=%2250%22 cy=%2250%22 r=%2242%22 fill=%22%23e35d3d%22/><circle cx=%2250%22 cy=%2250%22 r=%2216%22 fill=%22%23fff8f1%22/></svg>" />
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div class="brand">BeadFable <span class="badge">Beta</span></div>
+      <nav>
+        <a href="#studio">Studio</a>
+        <a href="#how">How it works</a>
+        <a href="#kit">Bead Kit</a>
+      </nav>
+    </header>
+
+    <main>
+      <!-- Hero: chibi is the story, per PRD D1 -->
+      <section class="hero">
+        <div>
+          <h1>Turn yourself, your idol or your cat into chibi bead art.</h1>
+          <p class="lead">
+            Upload a photo, get a printable chibi-style fuse bead pattern —
+            with an <strong>exact, bead-by-bead shopping list</strong> so you
+            buy only what you need. No leftover beads. Nothing missing.
+          </p>
+          <a class="button" href="#studio">Make my pattern — free</a>
+          <div class="note">Works in your browser · nothing is uploaded to a server</div>
+        </div>
+        <div class="art" aria-label="Chibi bead pattern preview">
+          <canvas id="heroArt" width="288" height="288"></canvas>
+        </div>
+      </section>
+
+      <!-- Studio -->
+      <section id="studio" class="panel">
+        <h2>Pattern Studio</h2>
+        <p class="hint">
+          💡 Chibi, cartoon or simple images make the best bead art.
+          <em>AI Chibi Maker — turn any photo into a chibi first — coming soon.</em>
+        </p>
+
+        <div id="drop" class="drop">
+          <input id="file" type="file" accept="image/*" hidden />
+          <div class="drop-inner">
+            <div class="drop-icon">🖼️</div>
+            <div><strong>Click or drop an image here</strong></div>
+            <div class="drop-sub">PNG with transparent background works best</div>
+          </div>
+        </div>
+
+        <div class="controls">
+          <label>
+            Pegboard
+            <select id="boardSize">
+              <option value="29" selected>29 × 29 (1 board)</option>
+              <option value="50">50 × 50 (2 × 2 boards)</option>
+              <option value="58">58 × 58 (2 × 2 boards)</option>
+            </select>
+          </label>
+          <label>
+            Max colors: <span id="maxColorsVal">12</span>
+            <input id="maxColors" type="range" min="4" max="24" value="12" />
+          </label>
+        </div>
+
+        <div id="studioResult" hidden>
+          <div class="result-grid">
+            <div class="pattern-box">
+              <canvas id="patternCanvas"></canvas>
+              <div class="actions">
+                <button id="downloadBtn" class="button">Download pattern (PNG)</button>
+                <button id="printBtn" class="button secondary">Print</button>
+              </div>
+            </div>
+
+            <div class="bom-box">
+              <h3>Your bead list</h3>
+              <p id="bomSummary" class="bom-summary"></p>
+              <table class="bom">
+                <thead>
+                  <tr><th>#</th><th></th><th>Color</th><th>Beads</th><th></th></tr>
+                </thead>
+                <tbody id="bomBody"></tbody>
+              </table>
+
+              <div class="kit-cta" id="kit">
+                <div class="kit-title">Skip the shopping. Get the exact kit.</div>
+                <p>
+                  We count out <strong>every single bead</strong> for this pattern,
+                  add a pegboard &amp; ironing paper, and ship it to your door.
+                </p>
+                <button id="preorderBtn" class="button gold">
+                  Pre-order this Bead Kit · $19.9
+                </button>
+                <div class="note">Limited pre-order · ships from US warehouse</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- How it works / beginner guide -->
+      <section id="how" class="panel">
+        <h2>New to fuse beads? Three steps.</h2>
+        <div class="steps">
+          <div class="step">
+            <div class="step-num">1</div>
+            <h3>Place</h3>
+            <p>Follow the numbered pattern and place beads on a pegboard, color by color.</p>
+          </div>
+          <div class="step">
+            <div class="step-num">2</div>
+            <h3>Iron</h3>
+            <p>Cover with ironing paper and iron on medium heat for ~20 seconds until beads fuse.</p>
+          </div>
+          <div class="step">
+            <div class="step-num">3</div>
+            <h3>Peel &amp; flip</h3>
+            <p>Let it cool under a book, peel off, iron the other side. Done — display it!</p>
+          </div>
+        </div>
+        <div class="starter">
+          <h3>Starter gear (if you have none)</h3>
+          <ul>
+            <li><a target="_blank" rel="noopener sponsored" href="https://www.amazon.com/s?k=perler+beads+large+pegboard&tag=beadfable-20">Clear pegboard 29×29</a> — the size our patterns default to</li>
+            <li><a target="_blank" rel="noopener sponsored" href="https://www.amazon.com/s?k=perler+ironing+paper&tag=beadfable-20">Ironing paper</a> — reusable, 4–5 sheets last months</li>
+            <li><a target="_blank" rel="noopener sponsored" href="https://www.amazon.com/s?k=perler+beads+tweezers&tag=beadfable-20">Bead tweezers</a> — optional but saves your fingertips</li>
+            <li>Any household iron works — no special tools needed</li>
+          </ul>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <div>© 2026 BeadFable · Made for colorful ideas.</div>
+      <div class="fineprint">
+        Screen colors are approximate. As an Amazon Associate we earn from qualifying purchases.
+        Patterns you create from your own images are yours; please respect copyright.
+      </div>
+    </footer>
+  </div>
+
+  <!-- Pre-order modal -->
+  <div id="preorderModal" class="modal" hidden>
+    <div class="modal-card">
+      <button id="preorderClose" class="modal-close" aria-label="Close">×</button>
+      <h3>Pre-order your exact Bead Kit — $19.9</h3>
+      <p>Every kit is packed for <em>your</em> pattern:</p>
+      <ul>
+        <li>✅ Every color, counted to the exact bead (+5% spares)</li>
+        <li>✅ Pegboard sized for your pattern</li>
+        <li>✅ Ironing paper + printed pattern sheet</li>
+      </ul>
+      <p>We're taking pre-orders to gauge demand. Reserve yours by email —
+        your pattern's bead list is attached automatically. No payment until we confirm.</p>
+      <a id="preorderMail" class="button gold" href="#">Reserve my kit by email</a>
+    </div>
+  </div>
+
+  <script src="/palettes.js"></script>
+  <script src="/app.js"></script>
+  <script>
+    // hero art: a tiny chibi-heart sprite drawn from the real palette
+    (function () {
+      const M = [
+        "..1122..",
+        ".111222.",
+        "11112222",
+        "11112222",
+        ".111222.",
+        "..1122..",
+        "...12...",
+        "........"
+      ];
+      const colors = { 1: "#FF6EA2", 2: "#C22D33" };
+      const c = document.getElementById("heroArt");
+      const ctx = c.getContext("2d");
+      const cell = c.width / 8;
+      M.forEach((row, y) => row.split("").forEach((ch, x) => {
+        if (ch === ".") return;
+        ctx.fillStyle = colors[ch];
+        ctx.beginPath();
+        ctx.arc(x * cell + cell / 2, y * cell + cell / 2, cell / 2 - 3, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.fillStyle = "rgba(255,255,255,.3)";
+        ctx.beginPath();
+        ctx.arc(x * cell + cell / 2 - 4, y * cell + cell / 2 - 5, cell / 6, 0, Math.PI * 2);
+        ctx.fill();
+      }));
+    })();
+  </script>
+</body>
+</html>
