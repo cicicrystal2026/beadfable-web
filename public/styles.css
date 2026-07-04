@@ -93,6 +93,46 @@ h1 {
 .hint { color: #694f42; margin: 0 0 22px; }
 .hint em { color: #b9452c; font-style: normal; font-weight: 700; }
 
+.compare-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 22px;
+  margin: 24px 0 8px;
+}
+.compare-card {
+  border-radius: 16px;
+  padding: 22px 24px;
+  border: 1px solid #e7dcd2;
+  background: #fbfaf8;
+}
+.compare-card.us {
+  background: #fdf3e0;
+  border-color: #eeca7d;
+  box-shadow: 0 10px 30px rgba(217, 154, 43, 0.12);
+}
+.compare-label {
+  font-weight: 800;
+  font-size: 15px;
+  margin-bottom: 12px;
+  color: #8a6c5c;
+}
+.compare-card.us .compare-label { color: #a8761d; }
+.compare-card ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  line-height: 2;
+  color: #694f42;
+  font-size: 15px;
+}
+.compare-card.them ul { color: #97867c; }
+.compare-foot {
+  margin: 18px 0 0;
+  font-size: 14px;
+  color: #8a6c5c;
+}
+.compare-foot em { font-style: normal; font-weight: 700; color: #b9452c; }
+
 .drop {
   border: 2px dashed #dcb894;
   border-radius: 18px;
@@ -249,6 +289,7 @@ footer {
 
 @media (max-width: 860px) {
   .hero { grid-template-columns: 1fr; padding: 40px 0 50px; }
+  .compare-grid { grid-template-columns: 1fr; }
   .art { justify-self: start; }
   .result-grid { grid-template-columns: 1fr; }
   .steps { grid-template-columns: 1fr; }
