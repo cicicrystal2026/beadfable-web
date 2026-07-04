@@ -226,6 +226,19 @@
     drawPattern(grid, p, cell, true);
     ctx.drawImage(grid, pad, pad + 70);
 
+    // row/column coordinates every 5 beads, for locating positions on big boards
+    const gy = pad + 70;
+    ctx.font = "11px Arial";
+    ctx.fillStyle = "#8a6c5c";
+    for (let i = 1; i <= p.size; i++) {
+      if (i !== 1 && i % 5 !== 0) continue;
+      ctx.textAlign = "center";
+      ctx.fillText(String(i), pad + (i - 0.5) * cell, gy - 8);
+      ctx.textAlign = "right";
+      ctx.fillText(String(i), pad - 6, gy + (i - 0.5) * cell + 4);
+    }
+    ctx.textAlign = "left";
+
     let y = pad + 70 + gridPx + 60;
     ctx.font = "bold 20px Arial";
     ctx.fillStyle = "#2b1d16";
