@@ -4,7 +4,8 @@ Turn any photo into a chibi-style fuse bead pattern — with an exact,
 bead-by-bead shopping list (BOM), affiliate purchase links, and a $19.9
 exact-count Bead Kit pre-order to validate demand.
 
-Product requirements: [docs/PRD-V1.md](docs/PRD-V1.md) (中文).
+Product requirements: [docs/PRD.md](docs/PRD.md) (中文) ·
+Competitor teardown: [docs/competitor-pindou-planet.md](docs/competitor-pindou-planet.md)
 
 ## Stack
 
@@ -27,5 +28,5 @@ No build step; edit files under `public/` directly.
 - Replace the `beadfable-20` placeholder Amazon Associates tag in
   `public/app.js` and `public/index.html`.
 - Calibrate `public/palettes.js` hex values against physical Perler beads
-  (PRD §9).
+  (PRD §10.3).
 - Swap the pre-order mailto flow for a Stripe Payment Link (PRD milestone W2).

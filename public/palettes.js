@@ -1,7 +1,7 @@
 /*
  * Bead color palettes. Hex values are community-sourced screen approximations;
  * they must be re-calibrated against physical beads before we advertise
- * color accuracy (see docs/PRD-V1.md §9).
+ * color accuracy (see docs/PRD.md §10.3).
  *
  * Structure supports multiple brands (Artkal planned for the self-operated kits).
  */
