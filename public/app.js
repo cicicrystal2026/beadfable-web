@@ -69,6 +69,14 @@
     w.document.close();
   }
 
+  function downloadMirrored() {
+    if (!pattern) return;
+    const a = document.createElement("a");
+    a.download = `beadfable-pattern-${pattern.size}x${pattern.size}-mirrored.png`;
+    a.href = BeadEngine.buildSheet(BeadEngine.mirror(pattern)).toDataURL("image/png");
+    a.click();
+  }
+
   function shareLink() {
     if (!pattern) return;
     const url = `${location.origin}/p/#${BeadEngine.encodeShare(pattern)}`;
@@ -142,6 +150,7 @@
   els.downloadBtn.addEventListener("click", downloadSheet);
   els.printBtn.addEventListener("click", printSheet);
   els.shareBtn.addEventListener("click", shareLink);
+  document.getElementById("mirrorBtn").addEventListener("click", downloadMirrored);
   els.preorderBtn.addEventListener("click", () => { els.preorderModal.hidden = false; });
   els.preorderClose.addEventListener("click", () => { els.preorderModal.hidden = true; });
   els.preorderModal.addEventListener("click", (e) => {

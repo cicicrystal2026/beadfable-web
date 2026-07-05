@@ -203,10 +203,14 @@ window.BeadEngine = (function () {
     ctx.fillStyle = "#2b1d16";
     ctx.font = "bold 30px Arial";
     ctx.textAlign = "left";
-    ctx.fillText("BeadFable Pattern", pad, pad + 10);
+    ctx.fillText(p.mirrored ? "BeadFable Pattern (MIRRORED)" : "BeadFable Pattern", pad, pad + 10);
     ctx.font = "16px Arial";
     ctx.fillStyle = "#694f42";
-    ctx.fillText(`${p.size}×${p.size} · ${brand.name} palette · beadfable.com`, pad, pad + 40);
+    ctx.fillText(
+      `${p.size}×${p.size} · ${brand.name} palette · beadfable.com` +
+        (p.mirrored ? " · iron the back, front will match the original" : ""),
+      pad, pad + 40
+    );
 
     const grid = document.createElement("canvas");
     drawPattern(grid, p, cell, true);
@@ -252,6 +256,36 @@ window.BeadEngine = (function () {
     return canvas;
   }
 
+  /* Horizontal mirror — print this and iron the back so the finished
+   * front matches the original orientation. */
+  function mirror(p) {
+    const size = p.size;
+    const cells = new Int16Array(size * size);
+    for (let y = 0; y < size; y++) {
+      for (let x = 0; x < size; x++) {
+        cells[y * size + x] = p.cells[y * size + (size - 1 - x)];
+      }
+    }
+    return { size, cells, brand: p.brand, used: p.used, mirrored: true };
+  }
+
+  /* Build a pattern directly from a character map (featured gallery). */
+  function fromMap(map, legend, boardSize, brandKey) {
+    const brand = getBrand(brandKey || "perler");
+    const h = map.length, w = map[0].length;
+    const size = boardSize || Math.max(h, w);
+    const cells = new Int16Array(size * size).fill(-1);
+    const ox = Math.floor((size - w) / 2), oy = Math.floor((size - h) / 2);
+    for (let y = 0; y < h; y++) {
+      for (let x = 0; x < w; x++) {
+        const ch = map[y][x];
+        if (ch === ".") continue;
+        cells[(y + oy) * size + (x + ox)] = legend[ch];
+      }
+    }
+    return { size, cells, brand: brand.key, used: buildUsed(cells, brand) };
+  }
+
   // ---------- share codec ----------
 
   function encodeShare(p) {
@@ -295,5 +329,5 @@ window.BeadEngine = (function () {
     }
   }
 
-  return { convert, drawPattern, drawBeads, buildSheet, encodeShare, decodeShare, getBrand };
+  return { convert, drawPattern, drawBeads, buildSheet, encodeShare, decodeShare, getBrand, mirror, fromMap };
 })();
