@@ -6,12 +6,11 @@
   "assets": {
     "directory": "./public",
     "binding": "ASSETS"
-  }
-  // Custom domain — requires the domain's DNS zone to be active in your
-  // Cloudflare account first (see docs/deploy.md), then uncomment, replace
-  // with your domain, and run `npx wrangler deploy`:
-  // ,"routes": [
-  //   { "pattern": "beadfable.com", "custom_domain": true },
-  //   { "pattern": "www.beadfable.com", "custom_domain": true }
-  // ]
+  },
+  // Requires the beadfable.com zone to be Active in your Cloudflare account
+  // (docs/deploy.md step 3) before `npx wrangler deploy`.
+  "routes": [
+    { "pattern": "beadfable.com", "custom_domain": true },
+    { "pattern": "www.beadfable.com", "custom_domain": true }
+  ]
 }
