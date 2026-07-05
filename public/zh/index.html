@@ -1,0 +1,231 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>拼豆物语 BeadFable — 照片变 Q 版拼豆图纸</title>
+  <meta name="description" content="上传照片，生成 Q 版拼豆图纸，自带精确到颗的色号清单。一晚就能拼完，不剩豆、不缺豆。" />
+  <link rel="canonical" href="https://beadfable.com/zh/" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="BeadFable" />
+  <meta property="og:title" content="拼豆物语 — 照片变 Q 版拼豆图纸" />
+  <meta property="og:description" content="精确到颗的色号清单，一晚拼完，不剩豆不缺豆。" />
+  <meta property="og:url" content="https://beadfable.com/zh/" />
+  <meta property="og:image" content="https://beadfable.com/og.png" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><circle cx=%2250%22 cy=%2250%22 r=%2242%22 fill=%22%23e35d3d%22/><circle cx=%2250%22 cy=%2250%22 r=%2216%22 fill=%22%23fff8f1%22/></svg>" />
+  <style>
+    * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+    body {
+      margin: 0;
+      font-family: -apple-system, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+      background: #fff8f1;
+      color: #2b1d16;
+      padding-bottom: calc(84px + env(safe-area-inset-bottom)); /* sticky bar space */
+    }
+    .wrap { width: min(560px, 100%); margin: 0 auto; padding: 0 16px; }
+    header { display: flex; align-items: center; justify-content: space-between; padding: 16px 0; }
+    .brand { font-size: 20px; font-weight: 800; letter-spacing: -0.5px; }
+    .badge { margin-left: 6px; padding: 3px 8px; border-radius: 999px; background: #f4dfce; font-size: 11px; font-weight: 700; }
+    .lang { font-size: 13px; color: #8a6c5c; text-decoration: none; font-weight: 700; }
+
+    h1 { font-size: clamp(28px, 8vw, 36px); line-height: 1.15; letter-spacing: -1px; margin: 18px 0 10px; }
+    .lead { color: #694f42; font-size: 15.5px; line-height: 1.7; margin: 0 0 18px; }
+    .lead b { color: #b9452c; }
+
+    .contrast {
+      display: flex; gap: 10px; margin: 0 0 22px; font-size: 12.5px;
+    }
+    .con-card { flex: 1; border-radius: 12px; padding: 12px; line-height: 1.7; }
+    .con-card.them { background: #f5efe8; color: #97867c; }
+    .con-card.us { background: #fdf3e0; border: 1px solid #eeca7d; color: #694f42; }
+    .con-card b { display: block; font-size: 12px; margin-bottom: 4px; }
+    .con-card.us b { color: #a8761d; }
+
+    .panel { background: #fff; border: 1px solid #f0ddcb; border-radius: 18px; padding: 20px 16px; margin: 0 0 18px; }
+    .panel h2 { margin: 0 0 12px; font-size: 19px; }
+
+    .drop {
+      border: 2px dashed #dcb894; border-radius: 14px; padding: 30px 16px;
+      text-align: center; background: #fffdf9; font-size: 14px; color: #694f42;
+    }
+    .drop .ic { font-size: 34px; margin-bottom: 6px; }
+    .drop b { display: block; color: #2b1d16; font-size: 15px; }
+    .drop-sub { font-size: 12px; color: #a68b7a; margin-top: 4px; }
+
+    .controls { display: flex; gap: 14px; margin: 16px 0 0; }
+    .controls label { flex: 1; font-size: 13px; font-weight: 700; color: #4b352a; }
+    .controls select {
+      display: block; width: 100%; margin-top: 6px; font-size: 15px;
+      padding: 10px; border: 1px solid #dcb894; border-radius: 10px; background: #fff;
+    }
+    .controls input[type="range"] { display: block; width: 100%; margin-top: 14px; }
+
+    #patternCanvas { width: 100%; height: auto; border: 1px solid #eee0d2; border-radius: 10px; display: block; }
+    .meta-row { display: flex; gap: 6px; flex-wrap: wrap; margin: 12px 0; }
+    .chip { font-size: 11.5px; font-weight: 700; color: #694f42; background: #f4ead9; border-radius: 999px; padding: 4px 10px; }
+
+    .bom { width: 100%; border-collapse: collapse; font-size: 14px; }
+    .bom th { text-align: left; font-size: 11px; color: #8a6c5c; padding: 6px 4px; border-bottom: 2px solid #f0ddcb; }
+    .bom td { padding: 8px 4px; border-bottom: 1px solid #f6e8d8; }
+    .swatch { display: inline-block; width: 20px; height: 20px; border-radius: 6px; border: 1px solid rgba(0,0,0,.18); vertical-align: middle; }
+    .bom-num { font-weight: 800; }
+    .bom-count { font-weight: 700; text-align: right; }
+    .bom-code { color: #8a6c5c; font-size: 12px; }
+
+    .button {
+      display: block; width: 100%; padding: 14px; border: none; border-radius: 12px;
+      background: #e35d3d; color: #fff; font-weight: 800; font-size: 15.5px;
+      text-align: center; text-decoration: none; cursor: pointer;
+      box-shadow: 0 5px 0 #b9452c;
+    }
+    .button:active { transform: translateY(3px); box-shadow: 0 2px 0 #b9452c; }
+    .button.secondary { background: #8a6c5c; box-shadow: 0 5px 0 #6b5347; }
+    .button.gold { background: #d99a2b; box-shadow: 0 5px 0 #a8761d; }
+    .btn-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 14px; }
+    .btn-note { text-align: center; font-size: 12px; color: #8a6c5c; margin-top: 10px; }
+    .copied { color: #14734a; font-weight: 700; }
+
+    .steps { display: grid; gap: 10px; }
+    .step { display: flex; gap: 12px; align-items: flex-start; background: #fffdf9; border: 1px solid #f0ddcb; border-radius: 12px; padding: 12px 14px; }
+    .step-num {
+      flex: none; width: 28px; height: 28px; border-radius: 50%; background: #e35d3d;
+      color: #fff; font-weight: 800; font-size: 14px; display: flex; align-items: center; justify-content: center;
+    }
+    .step b { display: block; font-size: 14.5px; }
+    .step p { margin: 2px 0 0; font-size: 13px; color: #694f42; line-height: 1.6; }
+
+    footer { padding: 22px 0 30px; font-size: 12px; color: #a68b7a; text-align: center; line-height: 1.8; }
+    footer a { color: #b9452c; font-weight: 700; }
+
+    /* sticky bottom kit bar (appears after a pattern is generated) */
+    .kitbar {
+      position: fixed; left: 0; right: 0; bottom: 0; z-index: 30;
+      background: #fdf3e0; border-top: 1px solid #f0dcb4;
+      padding: 10px 16px calc(10px + env(safe-area-inset-bottom));
+      display: none; align-items: center; gap: 12px;
+    }
+    .kitbar.show { display: flex; }
+    .kitbar .kt { flex: 1; font-size: 12.5px; color: #694f42; line-height: 1.4; }
+    .kitbar .kt b { display: block; font-size: 14px; color: #2b1d16; }
+    .kitbar .button { width: auto; padding: 12px 16px; font-size: 14px; }
+
+    .modal { position: fixed; inset: 0; background: rgba(43,29,22,.55); display: flex; align-items: flex-end; z-index: 50; }
+    .modal[hidden] { display: none; }
+    .sheet {
+      background: #fff; border-radius: 20px 20px 0 0; padding: 24px 20px calc(24px + env(safe-area-inset-bottom));
+      width: 100%;
+    }
+    .sheet h3 { margin: 0 0 8px; }
+    .sheet p { color: #694f42; font-size: 14px; line-height: 1.7; }
+    .sheet ul { padding-left: 2px; list-style: none; margin: 8px 0 16px; font-size: 14px; line-height: 2; color: #694f42; }
+    .sheet .close { position: absolute; right: 18px; margin-top: -6px; border: none; background: none; font-size: 24px; color: #8a6c5c; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div class="brand">拼豆物语 <span class="badge">Beta</span></div>
+      <a class="lang" href="/">English →</a>
+    </header>
+
+    <h1>把你、爱豆、你家猫<br>变成 Q 版拼豆。</h1>
+    <p class="lead">
+      上传照片，生成 Q 版拼豆图纸，自带<b>精确到颗的色号清单</b>——
+      一块板、十来个色、一个晚上拼完。<b>不剩豆，不缺豆。</b>
+    </p>
+
+    <div class="contrast">
+      <div class="con-card them">
+        <b>别家转换器</b>
+        100×100 大图 · 50+ 色<br>上万颗豆 · 拼到怀疑人生
+      </div>
+      <div class="con-card us">
+        <b>拼豆物语</b>
+        29×29 一块板 · ≤12 色<br>几百颗豆 · 一晚出成品
+      </div>
+    </div>
+
+    <section class="panel" id="studio">
+      <h2>照片转图纸 <span style="font-size:12px;color:#8a6c5c;font-weight:400;">免费 · 图片不上传服务器</span></h2>
+      <div id="drop" class="drop">
+        <input id="file" type="file" accept="image/*" hidden />
+        <div class="ic">🖼️</div>
+        <b>点这里选照片</b>
+        <div class="drop-sub">Q 版 / 卡通 / 简笔画效果最好 · 透明底 PNG 最佳</div>
+      </div>
+      <div class="controls">
+        <label>板子
+          <select id="boardSize">
+            <option value="29" selected>29×29（1 块板）</option>
+            <option value="50">50×50（4 块板）</option>
+            <option value="58">58×58（4 块板）</option>
+          </select>
+        </label>
+        <label>最多用色：<span id="maxColorsVal">12</span>
+          <input id="maxColors" type="range" min="4" max="24" value="12" />
+        </label>
+      </div>
+    </section>
+
+    <section class="panel" id="result" hidden>
+      <h2>你的图纸</h2>
+      <canvas id="patternCanvas" aria-label="拼豆图纸"></canvas>
+      <div class="meta-row" id="metaRow"></div>
+      <div class="btn-row">
+        <button class="button" id="dlBtn">下载高清图纸</button>
+        <button class="button secondary" id="mirrorBtn">镜像图纸（熨烫用）</button>
+      </div>
+      <button class="button secondary" id="copyBtn" style="margin-top:10px;">复制色号清单（去配豆）</button>
+      <div class="btn-note" id="copyNote">清单含每个色号的精确颗数，买豆不多买一颗</div>
+
+      <h2 style="margin-top:22px;">色号清单</h2>
+      <table class="bom">
+        <thead><tr><th>#</th><th></th><th>颜色</th><th style="text-align:right;">颗数</th></tr></thead>
+        <tbody id="bomBody"></tbody>
+      </table>
+      <div class="btn-note" id="bomSummary"></div>
+    </section>
+
+    <section class="panel">
+      <h2>没拼过？三步上手</h2>
+      <div class="steps">
+        <div class="step"><div class="step-num">1</div><div><b>摆豆</b><p>照着图纸上的编号，一个颜色一个颜色往板上摆。</p></div></div>
+        <div class="step"><div class="step-num">2</div><div><b>熨烫</b><p>盖上烫纸，熨斗中温压 20 秒左右，豆子熔在一起。</p></div></div>
+        <div class="step"><div class="step-num">3</div><div><b>翻面再烫</b><p>压书本晾凉、撕纸、翻面再烫一次，完工摆起来！</p></div></div>
+      </div>
+    </section>
+
+    <footer>
+      © 2026 BeadFable · 拼豆物语<br>
+      屏幕色仅供参考 · 请只上传你有权使用的图片 · <a href="/">English version</a>
+    </footer>
+  </div>
+
+  <!-- sticky kit bar -->
+  <div class="kitbar" id="kitbar">
+    <div class="kt"><b>懒得配豆？按图配好寄给你</b>精确到颗 · 含板子和烫纸</div>
+    <button class="button gold" id="kitBtn">套装预售 ¥39.9</button>
+  </div>
+
+  <!-- kit sheet -->
+  <div class="modal" id="kitModal" hidden>
+    <div class="sheet">
+      <button class="close" id="kitClose" aria-label="关闭">×</button>
+      <h3>按图配豆套装 · ¥39.9 预售登记</h3>
+      <p>我们按你这张图纸把每个色号数好、分装成包，配上板子、烫纸和印刷图纸寄给你——<b>拼完不剩豆，也不会缺豆。</b></p>
+      <ul>
+        <li>✅ 每个色号精确到颗（多送 5% 备用）</li>
+        <li>✅ 板子 + 烫纸 + 印刷图纸</li>
+        <li>✅ 现在是预售登记，暂不付款，到货前邮件确认</li>
+      </ul>
+      <a class="button gold" id="kitMail" href="#">邮件登记（自动附上你的清单）</a>
+      <div class="btn-note">正式开售会优先通知登记用户</div>
+    </div>
+  </div>
+
+  <script src="/config.js"></script>
+  <script src="/palettes.js"></script>
+  <script src="/engine.js"></script>
+  <script src="/zh/zh.js"></script>
+</body>
+</html>
