@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Shared bead pattern — BeadFable</title>
+  <meta name="description" content="A fuse bead pattern shared from BeadFable — with the exact bead-by-bead list." />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><circle cx=%2250%22 cy=%2250%22 r=%2242%22 fill=%22%23e35d3d%22/><circle cx=%2250%22 cy=%2250%22 r=%2216%22 fill=%22%23fff8f1%22/></svg>" />
+  <link rel="stylesheet" href="/styles.css" />
+  <style>
+    .p-grid { display: grid; grid-template-columns: 1.05fr 0.95fr; gap: 32px; align-items: start; margin-top: 14px; }
+    .pattern-hero { background: #fff; border: 1px solid #f0ddcb; border-radius: 20px; padding: 26px; }
+    .pattern-hero canvas { display: block; width: 100%; height: auto; border-radius: 12px; background: #fffdf9; }
+    .meta-row { display: flex; gap: 8px; flex-wrap: wrap; margin: 16px 0 8px; }
+    .meta-chip { font-size: 12px; font-weight: 700; color: #694f42; background: #f4ead9; border-radius: 999px; padding: 5px 11px; }
+    .author { font-size: 13px; color: #8a6c5c; }
+    .author b { color: #b9452c; }
+    .cta-card { position: sticky; top: 20px; }
+    .cta-card .button { width: 100%; text-align: center; box-sizing: border-box; display: block; }
+    .cta-stack { display: grid; gap: 12px; }
+    .kit-line { display: flex; justify-content: space-between; font-size: 14px; color: #694f42; padding: 6px 2px; }
+    .kit-line + .kit-line { border-top: 1px dashed #f0ddcb; }
+    .kit-line b { color: #2b1d16; }
+    .ghostlink { text-align: center; font-size: 14px; font-weight: 800; color: #b9452c; text-decoration: none; padding: 8px; display: block; }
+    .share-row { display: flex; gap: 10px; justify-content: center; margin-top: 14px; }
+    .share-chip {
+      font-size: 12.5px; font-weight: 700; color: #694f42; border: 1px solid #e7d6c3;
+      border-radius: 999px; padding: 7px 13px; background: #fff; cursor: pointer;
+    }
+    .mini-steps { display: flex; gap: 14px; margin-top: 8px; }
+    .mini-step { flex: 1; background: #fffdf9; border: 1px solid #f0ddcb; border-radius: 12px; padding: 12px 14px; font-size: 13.5px; color: #694f42; }
+    .mini-step b { display: block; color: #2b1d16; margin-bottom: 2px; }
+    .empty-state { text-align: center; padding: 90px 20px; }
+    .empty-state .drop-icon { font-size: 44px; }
+    @media (max-width: 860px) {
+      .p-grid { grid-template-columns: 1fr; }
+      .mini-steps { flex-direction: column; }
+      .cta-card { position: static; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div class="brand">BeadFable <span class="badge">Beta</span></div>
+      <nav>
+        <a href="/#studio">Studio</a>
+        <a href="/ai">AI Chibi</a>
+        <a href="/pricing">Pricing</a>
+        <a href="/#kit">Bead Kit</a>
+      </nav>
+    </header>
+
+    <main>
+      <div id="notFound" class="empty-state" hidden>
+        <div class="drop-icon">🫥</div>
+        <h2>Hmm, this pattern link looks broken.</h2>
+        <p class="hint">The pattern data lives in the link itself — make sure you copied the whole thing.</p>
+        <a class="button" href="/#studio">Make your own pattern — free</a>
+      </div>
+
+      <div id="found" class="p-grid" hidden>
+        <!-- Pattern -->
+        <section>
+          <div class="pattern-hero">
+            <canvas id="beadArt" aria-label="Shared fuse bead pattern"></canvas>
+            <div class="meta-row" id="metaRow"></div>
+            <div class="author">Made with <b>BeadFable</b> — the pattern that comes with its shopping list.</div>
+          </div>
+
+          <div class="panel" style="margin-top:26px;">
+            <h3 style="margin:0 0 6px;">Bead list</h3>
+            <p class="bom-summary" id="bomSummary"></p>
+            <table class="bom">
+              <thead><tr><th>#</th><th></th><th>Color</th><th>Beads</th><th></th></tr></thead>
+              <tbody id="bomBody"></tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- CTAs -->
+        <aside class="cta-card">
+          <div class="panel" style="margin:0;background:#fdf3e0;border-color:#f0dcb4;">
+            <h3 style="margin:0 0 4px;">Make this one — with zero shopping</h3>
+            <p style="margin:0 0 14px;color:#694f42;font-size:14.5px;">
+              Every bead counted for this pattern, packed and shipped.
+            </p>
+            <div style="margin-bottom:14px;" id="kitLines"></div>
+            <div class="cta-stack">
+              <a class="button gold" id="kitBtn" href="#">Get the exact Bead Kit · $19.9</a>
+              <button class="button" id="dlBtn">Download pattern (PNG) — free</button>
+              <a class="ghostlink" href="/#studio">✨ Or make your own from a photo — free</a>
+            </div>
+            <div class="note" style="text-align:center;">Kit ships from US warehouse · pattern is free forever</div>
+          </div>
+          <div class="share-row">
+            <button class="share-chip" id="pinBtn">📌 Pin it</button>
+            <button class="share-chip" id="xBtn">𝕏 Post</button>
+            <button class="share-chip" id="copyBtn">🔗 Copy link</button>
+          </div>
+        </aside>
+      </div>
+
+      <section class="panel" style="margin-top:26px;" id="howStrip" hidden>
+        <h3 style="margin:0 0 12px;">Never beaded before? It's three steps.</h3>
+        <div class="mini-steps">
+          <div class="mini-step"><b>1 · Place</b>Follow the numbered grid, color by color.</div>
+          <div class="mini-step"><b>2 · Iron</b>Cover with paper, iron ~20s on medium.</div>
+          <div class="mini-step"><b>3 · Peel &amp; flip</b>Cool it, flip it, iron the back. Done.</div>
+        </div>
+      </section>
+    </main>
+
+    <footer style="margin-top:36px;">
+      <div>© 2026 BeadFable · Made for colorful ideas.</div>
+      <div class="fineprint">As an Amazon Associate we earn from qualifying purchases.</div>
+    </footer>
+  </div>
+
+  <script src="/config.js"></script>
+  <script src="/palettes.js"></script>
+  <script src="/engine.js"></script>
+  <script src="/p/p.js"></script>
+</body>
+</html>

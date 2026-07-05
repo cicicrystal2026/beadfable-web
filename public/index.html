@@ -15,7 +15,8 @@
       <div class="brand">BeadFable <span class="badge">Beta</span></div>
       <nav>
         <a href="#studio">Studio</a>
-        <a href="#how">How it works</a>
+        <a href="/ai">AI Chibi</a>
+        <a href="/pricing">Pricing</a>
         <a href="#kit">Bead Kit</a>
       </nav>
     </header>
@@ -113,7 +114,10 @@
               <div class="actions">
                 <button id="downloadBtn" class="button">Download pattern (PNG)</button>
                 <button id="printBtn" class="button secondary">Print</button>
+                <button id="shareBtn" class="button secondary">Copy share link</button>
               </div>
+              <input id="shareUrl" class="share-url" readonly hidden
+                aria-label="Shareable pattern link" />
             </div>
 
             <div class="bom-box">
@@ -200,7 +204,9 @@
     </div>
   </div>
 
+  <script src="/config.js"></script>
   <script src="/palettes.js"></script>
+  <script src="/engine.js"></script>
   <script src="/app.js"></script>
   <script>
     // hero art: a tiny chibi-heart sprite drawn from the real palette

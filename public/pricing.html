@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pricing — BeadFable</title>
+  <meta name="description" content="The classic Studio is free forever. Pay only when the AI makes something you love." />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><circle cx=%2250%22 cy=%2250%22 r=%2242%22 fill=%22%23e35d3d%22/><circle cx=%2250%22 cy=%2250%22 r=%2216%22 fill=%22%23fff8f1%22/></svg>" />
+  <link rel="stylesheet" href="/styles.css" />
+  <style>
+    .tiers { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; margin: 30px 0; align-items: stretch; }
+    .tier { background: #fff; border: 2px solid #f0ddcb; border-radius: 20px; padding: 28px 26px; display: flex; flex-direction: column; }
+    .tier.reco { border-color: #d99a2b; background: #fdf3e0; position: relative; box-shadow: 0 16px 40px rgba(217,154,43,.14); }
+    .tier.reco::before {
+      content: "MOST POPULAR"; position: absolute; top: -12px; left: 50%; transform: translateX(-50%);
+      background: #d99a2b; color: #fff; font-size: 11px; font-weight: 800; letter-spacing: 1px;
+      border-radius: 999px; padding: 4px 12px;
+    }
+    .tier h3 { margin: 0 0 2px; font-size: 18px; }
+    .tier .for { font-size: 13px; color: #8a6c5c; margin-bottom: 14px; }
+    .price { font-size: 40px; font-weight: 900; letter-spacing: -2px; }
+    .price span { font-size: 14px; font-weight: 700; color: #8a6c5c; letter-spacing: 0; }
+    .tier ul { list-style: none; padding: 0; margin: 16px 0 22px; font-size: 14.5px; color: #694f42; line-height: 2.1; flex: 1; }
+    .tier ul .no { color: #b9a99d; }
+    .tier .button { width: 100%; text-align: center; box-sizing: border-box; display: block; }
+    .kit-banner {
+      display: grid; grid-template-columns: auto 1fr auto; gap: 22px; align-items: center;
+      background: #2b1d16; color: #fff8f1; border-radius: 20px; padding: 26px 30px; margin: 8px 0 36px;
+    }
+    .kit-banner canvas { border-radius: 12px; display: block; }
+    .kit-banner h3 { margin: 0 0 4px; font-size: 20px; color: #fff; }
+    .kit-banner p { margin: 0; color: #d9c3b2; font-size: 14.5px; }
+    .faq { display: grid; gap: 14px; }
+    .faq-item { background: #fff; border: 1px solid #f0ddcb; border-radius: 14px; padding: 18px 22px; }
+    .faq-item b { display: block; margin-bottom: 4px; }
+    .faq-item p { margin: 0; color: #694f42; font-size: 14.5px; line-height: 1.6; }
+    @media (max-width: 860px) {
+      .tiers { grid-template-columns: 1fr; }
+      .kit-banner { grid-template-columns: 1fr; text-align: center; }
+      .kit-banner canvas { margin: 0 auto; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div class="brand">BeadFable <span class="badge">Beta</span></div>
+      <nav>
+        <a href="/#studio">Studio</a>
+        <a href="/ai">AI Chibi</a>
+        <a href="/pricing" style="color:#e35d3d">Pricing</a>
+        <a href="/#kit">Bead Kit</a>
+      </nav>
+    </header>
+
+    <main>
+      <h1 style="font-size:clamp(30px,4vw,44px);letter-spacing:-1.5px;margin:16px 0 6px;text-align:center;">Simple pricing. Free to start.</h1>
+      <p class="hint" style="text-align:center;">The classic Studio is free forever. Pay only when the AI makes something you love.</p>
+
+      <div class="tiers">
+        <div class="tier">
+          <h3>Free</h3>
+          <div class="for">for every maker</div>
+          <div class="price">$0</div>
+          <ul>
+            <li>✔ Classic photo → pattern Studio</li>
+            <li>✔ Exact bead list (BOM), always</li>
+            <li>✔ Unlimited AI previews</li>
+            <li>✔ Your first AI pattern in HD</li>
+            <li class="no">✖ HD downloads after the first</li>
+          </ul>
+          <a class="button secondary" href="/#studio">Start free</a>
+        </div>
+
+        <div class="tier">
+          <h3>Per pattern</h3>
+          <div class="for">for the occasional gift</div>
+          <div class="price">$0.99 <span>/ pattern</span></div>
+          <ul>
+            <li>✔ Everything in Free</li>
+            <li>✔ This pattern in HD, forever</li>
+            <li>✔ Print-ready sheet + coordinates</li>
+            <li>✔ 2 free retries per photo</li>
+            <li class="no">✖ Unlimited generations</li>
+          </ul>
+          <a class="button" href="/ai">Make a pattern</a>
+        </div>
+
+        <div class="tier reco">
+          <h3>Unlimited</h3>
+          <div class="for">for the hooked 💘</div>
+          <div class="price">$4.99 <span>/ month</span></div>
+          <ul>
+            <li>✔ Unlimited AI generations</li>
+            <li>✔ All patterns in HD</li>
+            <li>✔ Priority rendering</li>
+            <li>✔ Early access to new styles</li>
+            <li>✔ Cancel anytime</li>
+          </ul>
+          <a class="button gold" id="unlimitedBtn" href="/ai">Go Unlimited</a>
+        </div>
+      </div>
+
+      <div class="kit-banner">
+        <canvas id="kitArt" width="96" height="96" aria-hidden="true"></canvas>
+        <div>
+          <h3>Want the beads too? Get the exact Kit — $19.9</h3>
+          <p>Any pattern, every bead counted (+5% spares), pegboard &amp; ironing paper included. No leftover beads, nothing missing.</p>
+        </div>
+        <a class="button gold" href="/#studio">Make a pattern first</a>
+      </div>
+
+      <div class="faq">
+        <div class="faq-item">
+          <b>Which bead brands do patterns match?</b>
+          <p>Perler colors by default — the most common brand in the US. Artkal support is coming with our kits. Every color in your list is a real, buyable bead.</p>
+        </div>
+        <div class="faq-item">
+          <b>What if I don't like the AI result?</b>
+          <p>You only pay when you download. Every photo includes 2 free retries, and previews are always free — no surprises.</p>
+        </div>
+        <div class="faq-item">
+          <b>Can I bead photos of my family, friends or pets?</b>
+          <p>Yes — your uploads are processed for you only and never become public patterns. Please only upload images you have the right to use.</p>
+        </div>
+      </div>
+    </main>
+
+    <footer style="margin-top:36px;">
+      <div>© 2026 BeadFable · Made for colorful ideas.</div>
+      <div class="fineprint">As an Amazon Associate we earn from qualifying purchases.</div>
+    </footer>
+  </div>
+
+  <script src="/config.js"></script>
+  <script>
+    if (window.BF_CONFIG.stripeUnlimitedUrl) {
+      document.getElementById("unlimitedBtn").href = window.BF_CONFIG.stripeUnlimitedUrl;
+    }
+    // kit art: bead heart on dark
+    (function () {
+      const M = ["..11.22..", ".1112222.", "111122222", "111122222", ".1112222.", "..11122..", "...112...", "....1...."];
+      const C = { 1: "#ff6ea2", 2: "#c22d33" };
+      const cv = document.getElementById("kitArt"), ctx = cv.getContext("2d");
+      const cell = cv.width / 9;
+      M.forEach((row, y) => row.split("").forEach((ch, x) => {
+        if (ch === ".") return;
+        const cx = x * cell + cell / 2, cy = y * cell + cell / 2, r = cell / 2 - 1;
+        ctx.fillStyle = C[ch];
+        ctx.beginPath(); ctx.arc(cx, cy, r, 0, Math.PI * 2); ctx.fill();
+        ctx.fillStyle = "rgba(255,255,255,.3)";
+        ctx.beginPath(); ctx.arc(cx - r * .3, cy - r * .35, r * .3, 0, Math.PI * 2); ctx.fill();
+      }));
+    })();
+  </script>
+</body>
+</html>

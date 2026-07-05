@@ -180,6 +180,16 @@ h1 {
   border: 1px solid #eee0d2;
 }
 .actions { display: flex; gap: 12px; margin-top: 16px; flex-wrap: wrap; }
+.share-url {
+  width: 100%;
+  margin-top: 10px;
+  padding: 10px 12px;
+  border: 1px solid #dcb894;
+  border-radius: 10px;
+  font-size: 13px;
+  color: #694f42;
+  background: #fffdf9;
+}
 
 .bom-box h3 { margin: 0 0 6px; }
 .bom-summary { margin: 0 0 14px; color: #694f42; font-size: 14px; }
