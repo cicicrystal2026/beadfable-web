@@ -2,7 +2,9 @@
   "name": "beadfable-web",
   "main": "src/worker.js",
   "compatibility_date": "2026-07-04",
-  "workers_dev": true,
+  // Custom domain only — no *.workers.dev preview URL, so deploys never
+  // prompt to register a workers.dev subdomain.
+  "workers_dev": false,
   "assets": {
     "directory": "./public",
     "binding": "ASSETS"
