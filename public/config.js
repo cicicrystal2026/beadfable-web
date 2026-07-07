@@ -6,5 +6,6 @@ window.BF_CONFIG = {
   preorderEmail: "hello@beadfable.com",
   stripeKitUrl: "",                       // Payment Link: $19.9 exact-count kit
   stripePatternUrl: "",                   // Payment Link: $0.99 per-pattern HD
-  stripeUnlimitedUrl: ""                  // Payment Link: $4.99/mo Unlimited
+  stripeUnlimitedUrl: "",                 // Payment Link: $4.99/mo Unlimited
+  xhsStoreUrl: ""                         // 小红书店铺兑换码商品链接（空 = 显示文字指引）
 };

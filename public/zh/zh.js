@@ -9,6 +9,19 @@
   let sourceImage = null;
   let pattern = null;
 
+  function drawPreviewWatermark(canvas) {
+    const ctx = canvas.getContext("2d");
+    ctx.save();
+    ctx.translate(canvas.width / 2, canvas.height / 2);
+    ctx.rotate(-Math.PI / 7);
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+    ctx.font = `bold ${Math.floor(canvas.width / 9)}px sans-serif`;
+    ctx.fillStyle = "rgba(43, 29, 22, 0.13)";
+    ctx.fillText("预览 · beadfable.com", 0, 0);
+    ctx.restore();
+  }
+
   function run() {
     if (!sourceImage) return;
     const size = parseInt($("boardSize").value, 10);
@@ -16,9 +29,11 @@
     pattern = BeadEngine.convert(sourceImage, size, maxColors);
     const cell = Math.max(10, Math.floor(640 / size));
     BeadEngine.drawPattern($("patternCanvas"), pattern, cell, true);
+    drawPreviewWatermark($("patternCanvas"));
     renderMeta();
     renderBom();
     updateKitMail();
+    renderUnlockState();
     $("result").hidden = false;
     $("kitbar").classList.add("show");
     $("result").scrollIntoView({ behavior: "smooth", block: "start" });
@@ -81,6 +96,88 @@
     a.click();
   }
 
+  // ---------- 兑换码解锁（高清/镜像下载） ----------
+  // 未配置 REDEEM_SECRET（接口返回 501/404/网络错误）时自动回退为免费下载，
+  // 保证上架兑换码之前线上行为不变。
+  const UNLOCK_KEY = "bf_zh_unlock_until";
+  let freeMode = false;
+  let pendingMirror = false;
+
+  // 探测兑换接口是否已启用：501/404/网络错误 = 未配置 → 全站免费无付费痕迹；
+  // 400（空请求被拒）= 已启用 → 下载走兑换码门槛。
+  (async function probeRedeem() {
+    try {
+      const r = await fetch("/api/redeem", { method: "POST", headers: { "content-type": "application/json" }, body: "{}" });
+      if (r.status === 501 || r.status === 404 || r.status === 405) freeMode = true;
+    } catch (e) {
+      freeMode = true;
+    }
+    renderUnlockState();
+  })();
+
+  function unlockedUntil() {
+    try { return parseInt(localStorage.getItem(UNLOCK_KEY) || "0", 10); } catch (e) { return 0; }
+  }
+  function unlocked() { return unlockedUntil() > Date.now(); }
+
+  function renderUnlockState() {
+    const el = $("unlockState");
+    if (unlocked()) {
+      const d = new Date(unlockedUntil());
+      el.innerHTML = `<span class="copied">已解锁高清下载 ✓ 有效期至 ${d.getMonth() + 1} 月 ${d.getDate()} 日</span>`;
+    } else if (!freeMode) {
+      el.textContent = "高清/镜像图纸下载需兑换码（小红书店铺购买，¥9.9 本机 30 天无限下载）";
+    } else {
+      el.textContent = "";
+    }
+  }
+
+  function requestDownload(mirrored) {
+    if (!pattern) return;
+    if (freeMode || unlocked()) { download(mirrored); return; }
+    pendingMirror = mirrored;
+    $("redeemMsg").textContent = "";
+    $("redeemModal").hidden = false;
+    $("redeemInput").focus();
+  }
+
+  async function submitCode() {
+    const code = $("redeemInput").value.trim();
+    if (!code) { $("redeemMsg").textContent = "请输入兑换码"; return; }
+    $("redeemMsg").textContent = "验证中…";
+    try {
+      const r = await fetch("/api/redeem", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ code })
+      });
+      if (r.status === 501 || r.status === 404 || r.status === 405) {
+        freeMode = true;
+        $("redeemModal").hidden = true;
+        renderUnlockState();
+        download(pendingMirror);
+        return;
+      }
+      const data = await r.json().catch(() => ({}));
+      if (r.ok && data.ok) {
+        try {
+          localStorage.setItem(UNLOCK_KEY, String(Date.now() + data.days * 86400000));
+        } catch (e) { freeMode = true; /* 隐私模式无法存储，本次放行 */ }
+        $("redeemModal").hidden = true;
+        renderUnlockState();
+        download(pendingMirror);
+      } else {
+        $("redeemMsg").textContent =
+          data.error === "expired_code" ? "这个兑换码已过期，请联系店铺客服" : "兑换码无效，请检查后重试（注意区分数字 0 和字母 O）";
+      }
+    } catch (e) {
+      freeMode = true;
+      $("redeemModal").hidden = true;
+      renderUnlockState();
+      download(pendingMirror);
+    }
+  }
+
   function loadFile(file) {
     if (!file || !file.type.startsWith("image/")) return;
     const img = new Image();
@@ -94,8 +191,18 @@
   $("maxColors").addEventListener("input", () => { $("maxColorsVal").textContent = $("maxColors").value; });
   $("maxColors").addEventListener("change", run);
 
-  $("dlBtn").addEventListener("click", () => download(false));
-  $("mirrorBtn").addEventListener("click", () => download(true));
+  $("dlBtn").addEventListener("click", () => requestDownload(false));
+  $("mirrorBtn").addEventListener("click", () => requestDownload(true));
+
+  $("redeemBtn").addEventListener("click", submitCode);
+  $("redeemInput").addEventListener("keydown", (e) => { if (e.key === "Enter") submitCode(); });
+  $("redeemClose").addEventListener("click", () => { $("redeemModal").hidden = true; });
+  $("redeemModal").addEventListener("click", (e) => {
+    if (e.target === $("redeemModal")) $("redeemModal").hidden = true;
+  });
+  $("redeemBuy").innerHTML = CFG.xhsStoreUrl
+    ? `<a href="${CFG.xhsStoreUrl}" target="_blank" rel="noopener" style="color:#b9452c;font-weight:800;">还没有兑换码？去小红书店铺购买 →</a>`
+    : "还没有兑换码？小红书搜索「BeadFable 拼豆图纸」购买，自动发货";
 
   $("copyBtn").addEventListener("click", () => {
     const text = listText();

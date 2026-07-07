@@ -177,6 +177,7 @@
       </div>
       <button class="button secondary" id="copyBtn" style="margin-top:10px;">复制色号清单（去配豆）</button>
       <div class="btn-note" id="copyNote">清单含每个色号的精确颗数，买豆不多买一颗</div>
+      <div class="btn-note" id="unlockState"></div>
 
       <h2 style="margin-top:22px;">色号清单</h2>
       <table class="bom">
@@ -205,6 +206,22 @@
   <div class="kitbar" id="kitbar">
     <div class="kt"><b>懒得配豆？按图配好寄给你</b>精确到颗 · 含板子和烫纸</div>
     <button class="button gold" id="kitBtn">套装预售 ¥39.9</button>
+  </div>
+
+  <!-- redeem sheet -->
+  <div class="modal" id="redeemModal" hidden>
+    <div class="sheet">
+      <button class="close" id="redeemClose" aria-label="关闭">×</button>
+      <h3>输入兑换码，解锁高清图纸下载</h3>
+      <p>高清图纸含<b>逐格色号编号、行列坐标、每色精确颗数图例</b>，可打印可镜像。
+        解锁后本机 <b>30 天内无限下载</b>，转多少张图都行。</p>
+      <input id="redeemInput" type="text" autocomplete="off" spellcheck="false"
+        placeholder="BF-XXXX-XXXX-XXXX-XXXX"
+        style="width:100%;padding:13px 14px;border:1px solid #dcb894;border-radius:12px;font-size:15px;letter-spacing:1px;margin:6px 0 10px;" />
+      <div class="btn-note" id="redeemMsg" style="text-align:left;min-height:18px;margin:0 0 10px;"></div>
+      <button class="button gold" id="redeemBtn">确认解锁</button>
+      <div class="btn-note" id="redeemBuy" style="margin-top:12px;"></div>
+    </div>
   </div>
 
   <!-- kit sheet -->

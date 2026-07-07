@@ -47,6 +47,11 @@ No build step; edit files under `public/` directly.
     Payment Links; while empty, all paid buttons fall back to email capture
 - AI provider key (enables `/api/stylize`):
   `npx wrangler secret put OPENAI_API_KEY`
+- Redeem codes for /zh/ HD downloads (Xiaohongshu virtual goods):
+  `npx wrangler secret put REDEEM_SECRET`, then generate codes with
+  `node tools/gen-codes.mjs <same-secret> <count> [days=30]` and paste
+  them into the store's auto-delivery. Until the secret is set, /zh/
+  downloads stay free with no paywall traces.
 
 ## Before launch
 

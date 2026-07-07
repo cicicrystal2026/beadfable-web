@@ -92,12 +92,81 @@ async function stylize(request, env) {
   return json({ image: `data:image/png;base64,${b64}` });
 }
 
+/* ---------- redeem codes (Xiaohongshu virtual-goods unlock) ----------
+ * Codes are HMAC-signed, no database needed. Generate with:
+ *   node tools/gen-codes.mjs <REDEEM_SECRET> <count> [days]
+ * Enable by setting the same secret here:
+ *   npx wrangler secret put REDEEM_SECRET
+ * Code layout (10 bytes, Crockford base32, BF-XXXX-XXXX-XXXX-XXXX):
+ *   [version=1][planDays][issueDay lo][issueDay hi][rand][rand][sig x4]
+ * issueDay = days since 2026-01-01; activation window 365 days.
+ */
+const B32 = "0123456789ABCDEFGHJKMNPQRSTVWXYZ";
+
+function normalizeCode(s) {
+  s = s.toUpperCase().replace(/O/g, "0").replace(/[IL]/g, "1").replace(/[^0-9A-Z]/g, "");
+  // strip the "BF" brand prefix (its letters are valid base32 and would
+  // otherwise be decoded as data)
+  if (s.length === 18 && s.startsWith("BF")) s = s.slice(2);
+  return s;
+}
+
+function b32decode(s) {
+  let bits = 0, value = 0;
+  const out = [];
+  for (const ch of s) {
+    const idx = B32.indexOf(ch);
+    if (idx < 0) return null;
+    value = (value << 5) | idx;
+    bits += 5;
+    if (bits >= 8) { out.push((value >>> (bits - 8)) & 255); bits -= 8; }
+  }
+  return new Uint8Array(out);
+}
+
+async function redeem(request, env) {
+  if (!env.REDEEM_SECRET) return json({ error: "redeem_not_configured" }, 501);
+
+  let body;
+  try {
+    body = await request.json();
+  } catch (e) {
+    return json({ ok: false, error: "bad_request" }, 400);
+  }
+  const bytes = typeof body.code === "string" ? b32decode(normalizeCode(body.code)) : null;
+  if (!bytes || bytes.length !== 10 || bytes[0] !== 1) {
+    return json({ ok: false, error: "invalid_code" }, 400);
+  }
+
+  const payload = bytes.slice(0, 6);
+  const key = await crypto.subtle.importKey(
+    "raw", new TextEncoder().encode(env.REDEEM_SECRET),
+    { name: "HMAC", hash: "SHA-256" }, false, ["sign"]
+  );
+  const mac = new Uint8Array(await crypto.subtle.sign("HMAC", key, payload));
+  for (let i = 0; i < 4; i++) {
+    if (mac[i] !== bytes[6 + i]) return json({ ok: false, error: "invalid_code" }, 400);
+  }
+
+  const issueDay = bytes[2] | (bytes[3] << 8);
+  const nowDay = Math.floor((Date.now() - Date.UTC(2026, 0, 1)) / 86400000);
+  if (nowDay - issueDay > 365 || issueDay - nowDay > 2) {
+    return json({ ok: false, error: "expired_code" }, 400);
+  }
+
+  return json({ ok: true, days: bytes[1] });
+}
+
 export default {
   async fetch(request, env) {
     const url = new URL(request.url);
     if (url.pathname === "/api/stylize") {
       if (request.method !== "POST") return json({ error: "method_not_allowed" }, 405);
       return stylize(request, env);
+    }
+    if (url.pathname === "/api/redeem") {
+      if (request.method !== "POST") return json({ error: "method_not_allowed" }, 405);
+      return redeem(request, env);
     }
     return env.ASSETS.fetch(request);
   }
