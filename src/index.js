@@ -1,5 +1,50 @@
+const MAHJONG_PREFIX = "/mahjong";
+const MAHJONG_ORIGIN = "https://mahjong-plum.vercel.app";
+
+async function proxyMahjong(request, requestUrl) {
+  if (requestUrl.pathname === MAHJONG_PREFIX) {
+    const redirectUrl = new URL(requestUrl);
+    redirectUrl.pathname = `${MAHJONG_PREFIX}/`;
+    return Response.redirect(redirectUrl.toString(), 308);
+  }
+
+  const upstreamUrl = new URL(requestUrl);
+  upstreamUrl.protocol = "https:";
+  upstreamUrl.host = "mahjong-plum.vercel.app";
+  upstreamUrl.pathname = requestUrl.pathname.slice(MAHJONG_PREFIX.length) || "/";
+
+  const upstreamResponse = await fetch(new Request(upstreamUrl, request));
+  const headers = new Headers(upstreamResponse.headers);
+  const location = headers.get("location");
+
+  if (location) {
+    const resolvedLocation = new URL(location, MAHJONG_ORIGIN);
+    if (resolvedLocation.origin === MAHJONG_ORIGIN) {
+      resolvedLocation.protocol = requestUrl.protocol;
+      resolvedLocation.host = requestUrl.host;
+      resolvedLocation.pathname = `${MAHJONG_PREFIX}${resolvedLocation.pathname}`;
+      headers.set("location", resolvedLocation.toString());
+    }
+  }
+
+  return new Response(upstreamResponse.body, {
+    status: upstreamResponse.status,
+    statusText: upstreamResponse.statusText,
+    headers
+  });
+}
+
 export default {
-  async fetch() {
+  async fetch(request) {
+    const requestUrl = new URL(request.url);
+
+    if (
+      requestUrl.pathname === MAHJONG_PREFIX ||
+      requestUrl.pathname.startsWith(`${MAHJONG_PREFIX}/`)
+    ) {
+      return proxyMahjong(request, requestUrl);
+    }
+
     return new Response(
       `<!doctype html>
       <html lang="en">
